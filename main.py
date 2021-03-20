@@ -9,3 +9,4 @@ def check_mail():
 # If determined as receipt, forward email to amazon {use correct 'from' address}
 def forward_email():
     print('Forwarding email to receipts@panel.amazon.com...')
+
