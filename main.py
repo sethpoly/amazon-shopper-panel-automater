@@ -1,3 +1,7 @@
+import service_account as acc
+import gspread
+
+
 # Loop through all emails starting from most recent
 # Using receipt classifier, determine if is valid receipt
 # Send email to amazon shopper panel email address if valid
@@ -10,3 +14,6 @@ def check_mail():
 def forward_email():
     print('Forwarding email to receipts@panel.amazon.com...')
 
+
+
+spreadsheet = acc.Spreadsheet('AmazonReceipts', 'Sheet1').sheet
