@@ -22,14 +22,13 @@ class Classifier:
         rows = data_sheet.get_all_values()
         return pd.DataFrame.from_records(rows)
 
-        # Removes punctuation, digits, HTML, from EMAIL column in data set
+        # Removes punctuation, HTML, from EMAIL column in data set
         # df[0] is EMAIL, df[1] is STATUS
 
     def clean_data(self):
         try:
             self.df[0] = self.df[0].apply(lambda x: x.lower())
             self.df[0] = self.df[0].apply(lambda x: x.translate(str.maketrans('', '', string.punctuation)))
-            self.df[0] = self.df[0].apply(lambda x: x.translate(str.maketrans('', '', '1234567890')))
             self.df[0] = self.df[0].apply(lambda x: x.translate(str.maketrans('', '', '\n')))
             print('Successfully cleaned data.')
         except AttributeError as e:
@@ -52,7 +51,7 @@ class Classifier:
         # Predict if @param email is rejection or not
 
     def predict(self, email):
-        category_names = {'reject': 'reject', 'not_reject': 'not_reject'}
+        category_names = {'receipt': 'receipt', 'not_receipt': 'not_receipt'}
         cod = self.nb.predict(self.vectorizer.transform([email]))
         return category_names[self.encoder.inverse_transform(cod)[0]]
 
