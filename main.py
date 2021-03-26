@@ -8,8 +8,6 @@ import traceback
 from bs4 import BeautifulSoup
 import re
 
-
-
 # gmail account credentials
 username = os.environ['GMAIL_RECEIPTS']
 password = os.environ['GMAIL_RECEIPTS_PASS']
@@ -37,6 +35,7 @@ def remove_whitespace(text):
             text = text.replace(ch, '')
     return text
 
+
 # authenticate (if fails: <allow less secure apps in gmail account>)
 def authenticate():
     try:
@@ -44,6 +43,7 @@ def authenticate():
         print(f'Logged in as {username} at {time.strftime("%H:%M:%S", time.localtime())}.')
     except imaplib.IMAP4.error:
         traceback.print_exc()
+
 
 # Close the imap connection
 def close_connection():
@@ -59,6 +59,8 @@ def close_connection():
 # Using receipt classifier, determine if is valid receipt
 # Send email to amazon shopper panel email address if valid
 # Continue until 15 successful emails sent
+
+# TODO: Filter emails by ORDER RECEIVED keywords
 def check_mail():
     print('Checking mail for receipts...')
     # Connect to mailbox
