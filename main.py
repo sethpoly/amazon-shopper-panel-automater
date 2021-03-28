@@ -64,9 +64,16 @@ def close_connection():
 def check_mail():
     print('Checking mail for receipts...')
     # Connect to mailbox
-    status, messages = imap.select('INBOX')
+    #status, messages = imap.select('INBOX')
+    imap.select('INBOX')
+    status, messages = imap.search(None, '(SUBJECT "order # confirmed") (BODY "Order confirmed")')
     n = 5  # Emails to parse
-    messages = int(messages[0])
+
+    temp_string = str(messages[0])
+    temp_arr = temp_string.split(' ')
+    print(temp_arr[1])
+
+    messages = int(temp_arr[1])
     if status == 'OK':
         for i in range(messages, messages - n, -1):  # Reverse traversal
             print('Processing email: ')
