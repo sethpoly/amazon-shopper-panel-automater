@@ -1,5 +1,4 @@
 import service_account as acc
-import gspread
 import email
 import imaplib
 import os
@@ -7,10 +6,13 @@ import time
 import traceback
 from bs4 import BeautifulSoup
 import re
+from dotenv import load_dotenv
+
+load_dotenv()  # take environment variables from .env.
 
 # gmail account credentials
-username = os.environ['GMAIL_RECEIPTS']
-password = os.environ['GMAIL_RECEIPTS_PASS']
+username = os.environ['GMAIL_EMAIL']
+password = os.environ['GMAIL_PASSWORD']
 
 # create IMAP4 class with SSL
 imap = imaplib.IMAP4_SSL('imap.gmail.com')
@@ -63,19 +65,22 @@ def close_connection():
 # TODO: Filter emails by ORDER RECEIVED keywords
 def check_mail():
     print('Checking mail for receipts...')
-    # Connect to mailbox
-    #status, messages = imap.select('INBOX')
-    imap.select('INBOX')
-    status, messages = imap.search(None, '(SUBJECT "order # confirmed") (BODY "Order confirmed")')
-    n = 5  # Emails to parse
 
-    temp_string = str(messages[0])
-    temp_arr = temp_string.split(' ')
+    # Connect to mailbox
+    imap.select('INBOX')
+
+    # status, messages = imap.search(None, '(SUBJECT "order # confirmed") (BODY "Order confirmed")')
+    status, messages = imap.search(None, 'ALL')
+    n = 10  # Emails to parse
+
+    temp_string = messages[0]
+    temp_arr = temp_string.split()
     print(temp_arr[1])
 
-    messages = int(temp_arr[1])
+    #messages = int(temp_arr[1])
     if status == 'OK':
-        for i in range(messages, messages - n, -1):  # Reverse traversal
+        #for i in range(messages, messages - n, -1):  # Reverse traversal
+        for i in temp_arr:
             print('Processing email: ')
             body = ''
             typ, data = imap.fetch(str(i), '(RFC822)')
