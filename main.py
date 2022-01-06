@@ -1,3 +1,4 @@
+from email import message
 import service_account as acc
 import email
 import imaplib
@@ -66,56 +67,43 @@ def close_connection():
 def check_mail():
     print('Checking mail for receipts...')
 
-    # Connect to mailbox
-    imap.select('INBOX')
+    status, messages = imap.select('INBOX')
+    if status != 'OK': exit('Incorrect mail box')
 
-    # status, messages = imap.search(None, '(SUBJECT "order # confirmed") (BODY "Order confirmed")')
-    status, messages = imap.search(None, 'ALL')
-    n = 10  # Emails to parse
+    for i in range(int(messages[0]), 1, -1):
+        res, msg = imap.fetch(str(i), '(RFC822)')
+        for response in msg:
+            if isinstance(response, tuple):
+                msg = email.message_from_bytes(response[1])
 
-    temp_string = messages[0]
-    temp_arr = temp_string.split()
-    print(temp_arr[1])
+                sender = msg['From']
+                subject = msg['Subject']
+                print(sender)
+                print(subject)
 
-    #messages = int(temp_arr[1])
-    if status == 'OK':
-        #for i in range(messages, messages - n, -1):  # Reverse traversal
-        for i in temp_arr:
-            print('Processing email: ')
-            body = ''
-            typ, data = imap.fetch(str(i), '(RFC822)')
-            for response_part in data:
-                if isinstance(response_part, tuple):
-                    original = email.message_from_bytes(response_part[1])
+                # Grab the body of the email
+                for part in msg.walk():
+                    try:
+                        body = part.get_payload(decode=True).decode()
+                    except:
+                        pass
+                body = clean_text(body)  # Clean formatting of email
+                print(body)
 
-                    company_name = original['From']
-                    print(company_name)
-                    print(original['Subject'])
+                # Predict if the email is a rejection email
+                # prediction = classifier.predict(body)
+                # print(prediction)
+                # if prediction == 'reject':  # move to reject inbox
+                #     typ, data = imap.store(num, '+X-GM-LABELS', '"Application Updates"')
+                #     add_reject_row(company_name, body)  # Add entry to spreadsheet
 
-                    # Grab the body of the email
-                    for part in original.walk():
-                        try:
-                            body = part.get_payload(decode=True).decode()
-                        except:
-                            pass
-
-                    body = clean_text(body)  # Clean formatting of email
-                    print(body)
-
-                    # Predict if the email is a rejection email
-                    # prediction = classifier.predict(body)
-                    # print(prediction)
-                    # if prediction == 'reject':  # move to reject inbox
-                    #     typ, data = imap.store(num, '+X-GM-LABELS', '"Application Updates"')
-                    #     add_reject_row(company_name, body)  # Add entry to spreadsheet
-
-                    # Remove SEEN flag
-                    # typ, data = imap.store(num, '-FLAGS', '\\Seen')
-                    # # Move to CHECKED inbox
-                    # typ, data = imap.store(num, '+X-GM-LABELS',
-                    #                        'Checked')
-                    # # Delete from inbox
-                    # typ, data = imap.store(num, '+FLAGS', '\\Deleted')
+                # Remove SEEN flag
+                # typ, data = imap.store(num, '-FLAGS', '\\Seen')
+                # # Move to CHECKED inbox
+                # typ, data = imap.store(num, '+X-GM-LABELS',
+                #                        'Checked')
+                # # Delete from inbox
+                # typ, data = imap.store(num, '+FLAGS', '\\Deleted')
 
     close_connection()
 
