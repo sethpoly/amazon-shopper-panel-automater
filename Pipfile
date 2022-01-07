@@ -8,6 +8,8 @@ gspread = "*"
 oauth2client = "*"
 bs4 = "*"
 python-dotenv = "*"
+pandas = "*"
+sklearn = "*"
 
 [dev-packages]
 
