@@ -1,6 +1,6 @@
 from email import message
 from classifier import Classifier
-from spreadsheet import Spreadsheet
+from service_account import Spreadsheet
 import email
 import imaplib
 import os
