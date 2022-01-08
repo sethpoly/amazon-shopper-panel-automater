@@ -4,7 +4,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.preprocessing import LabelEncoder
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.model_selection import train_test_split
-import service_account as acc
+from spreadsheet import Spreadsheet
 
 # Handles the data for receipt classifier
 # Uses sklearn, pandas, and Naive Bayes to predict if an email is a receipt or not
@@ -18,7 +18,7 @@ class Classifier:
 
     # Retrieve most recent receipt data set from sheets API
     def get_csv(self):
-        data_sheet = acc.Spreadsheet('AmazonReceipts', 'Sheet1').sheet
+        data_sheet = Spreadsheet('AmazonReceipts', 'Sheet1').sheet
         rows = data_sheet.get_all_values()
         return pd.DataFrame.from_records(rows)
 
@@ -48,8 +48,7 @@ class Classifier:
         # Fit dataset in naive bayes classifier
         self.nb.fit(self.x_train, self.y_train)
 
-        # Predict if @param email is rejection or not
-
+    # Predict if @param email is rejection or not
     def predict(self, email):
         category_names = {'receipt': 'receipt', 'not_receipt': 'not_receipt'}
         cod = self.nb.predict(self.vectorizer.transform([email]))

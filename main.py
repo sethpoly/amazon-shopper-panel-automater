@@ -1,5 +1,6 @@
 from email import message
-import service_account as acc
+from classifier import Classifier
+from spreadsheet import Spreadsheet
 import email
 import imaplib
 import os
@@ -10,6 +11,11 @@ import re
 from dotenv import load_dotenv
 
 load_dotenv()  # take environment variables from .env.
+
+# setup ML model
+classifier = Classifier()
+classifier.clean_data()
+classifier.fit()
 
 # gmail account credentials
 username = os.environ['GMAIL_EMAIL']
@@ -65,12 +71,18 @@ def close_connection():
 
 # TODO: Filter emails by ORDER RECEIVED keywords
 def check_mail():
-    print('Checking mail for receipts...')
+    emailsToCheck = 10
+    count = 0
+    print(f'Checking mail for receipts for the next {emailsToCheck} emails..')
 
     status, messages = imap.select('INBOX')
     if status != 'OK': exit('Incorrect mail box')
 
     for i in range(int(messages[0]), 1, -1):
+        if not count <= emailsToCheck:
+            return
+        count += 1
+
         res, msg = imap.fetch(str(i), '(RFC822)')
         for response in msg:
             if isinstance(response, tuple):
@@ -91,10 +103,10 @@ def check_mail():
                 print(body)
 
                 # Predict if the email is a rejection email
-                # prediction = classifier.predict(body)
-                # print(prediction)
+                prediction = classifier.predict(body)
+                print(prediction)
                 # if prediction == 'reject':  # move to reject inbox
-                #     typ, data = imap.store(num, '+X-GM-LABELS', '"Application Updates"')
+                #     typ, /data = imap.store(num, '+X-GM-LABELS', '"Application Updates"')
                 #     add_reject_row(company_name, body)  # Add entry to spreadsheet
 
                 # Remove SEEN flag
@@ -113,6 +125,6 @@ def forward_email(email):
     print('Forwarding email to receipts@panel.amazon.com...')
 
 
-spreadsheet = acc.Spreadsheet('AmazonReceipts', 'Sheet1').sheet
+spreadsheet = Spreadsheet('AmazonReceipts', 'Sheet1').sheet
 authenticate()
 check_mail()
