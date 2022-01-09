@@ -10,21 +10,20 @@ from spreadsheet import Spreadsheet
 # Uses sklearn, pandas, and Naive Bayes to predict if an email is a receipt or not
 class Classifier:
     def __init__(self):
-        self.df = self.get_csv()
+        self.df = self.__get_csv()
         self.x_train, self.x_test, self.y_train, self.y_test = None, None, None, None
         self.nb = MultinomialNB()
         self.vectorizer = CountVectorizer()
         self.encoder = LabelEncoder()
 
     # Retrieve most recent receipt data set from sheets API
-    def get_csv(self):
+    def __get_csv(self):
         data_sheet = Spreadsheet('AmazonReceipts', 'Sheet1').sheet
         rows = data_sheet.get_all_values()
         return pd.DataFrame.from_records(rows)
 
-        # Removes punctuation, HTML, from EMAIL column in data set
-        # df[0] is EMAIL, df[1] is STATUS
-
+    # Removes punctuation, HTML, from EMAIL column in data set
+    # df[0] is EMAIL, df[1] is STATUS
     def clean_data(self):
         try:
             self.df[0] = self.df[0].apply(lambda x: x.lower())
@@ -34,8 +33,7 @@ class Classifier:
         except AttributeError as e:
             print(f'Whoops: {repr(e)}')
 
-        # Fit data using Naive Bayes classifier
-
+    # Fit data using Naive Bayes classifier
     def fit(self):
         # pull data into vectors to create collection of text/tokens
 

@@ -6,7 +6,8 @@ import email
 import os
 from dotenv import load_dotenv
 
-load_dotenv()  # take environment variables from .env.
+# load environment variables from .env
+load_dotenv()  
 
 # setup ML model
 classifier = Classifier()
