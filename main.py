@@ -1,6 +1,6 @@
 from email import message
 from classifier import Classifier
-from service_account import Spreadsheet
+from spreadsheet import Spreadsheet
 import email
 import imaplib
 import os
@@ -68,8 +68,6 @@ def close_connection():
 # Using receipt classifier, determine if is valid receipt
 # Send email to amazon shopper panel email address if valid
 # Continue until 15 successful emails sent
-
-# TODO: Filter emails by ORDER RECEIVED keywords
 def check_mail():
     emailsToCheck = 10
     count = 0
@@ -102,7 +100,7 @@ def check_mail():
                 body = clean_text(body)  # Clean formatting of email
                 print(body)
 
-                # Predict if the email is a rejection email
+                # Predict if the email is a receipt
                 prediction = classifier.predict(body)
                 print(prediction)
                 # if prediction == 'reject':  # move to reject inbox

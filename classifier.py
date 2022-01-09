@@ -4,7 +4,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.preprocessing import LabelEncoder
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.model_selection import train_test_split
-from service_account import Spreadsheet
+from spreadsheet import Spreadsheet
 
 # Handles the data for receipt classifier
 # Uses sklearn, pandas, and Naive Bayes to predict if an email is a receipt or not
