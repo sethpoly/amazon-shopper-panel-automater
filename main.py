@@ -1,4 +1,5 @@
 from email import message
+from email_parser import EmailParser
 from classifier import Classifier
 from spreadsheet import Spreadsheet
 import email
@@ -6,8 +7,6 @@ import imaplib
 import os
 import time
 import traceback
-from bs4 import BeautifulSoup
-import re
 from dotenv import load_dotenv
 
 load_dotenv()  # take environment variables from .env.
@@ -23,27 +22,6 @@ password = os.environ['GMAIL_PASSWORD']
 
 # create IMAP4 class with SSL
 imap = imaplib.IMAP4_SSL('imap.gmail.com')
-
-
-# Clean email output of all script tags/html/css etc
-def clean_text(text):
-    text = re.sub(r'\. \{.*\}', '', text)  # Strip CSS
-    text = remove_whitespace(text)  # Remove invisible carriage returns etc
-
-    soup = BeautifulSoup(text, 'html.parser')
-    for s in soup(['script', 'style']):
-        s.extract()
-    return ' '.join(soup.stripped_strings)
-
-
-# Remove all white space and carriage returns
-def remove_whitespace(text):
-    chars = ['\n', '\t', '\r']
-    for ch in chars:
-        if ch in text:
-            text = text.replace(ch, '')
-    return text
-
 
 # authenticate (if fails: <allow less secure apps in gmail account>)
 def authenticate():
@@ -97,7 +75,7 @@ def check_mail():
                         body = part.get_payload(decode=True).decode()
                     except:
                         pass
-                body = clean_text(body)  # Clean formatting of email
+                body = EmailParser.clean_text(body)  # Clean formatting of email
                 print(body)
 
                 # Predict if the email is a receipt
