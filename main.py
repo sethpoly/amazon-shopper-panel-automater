@@ -10,9 +10,8 @@ from dotenv import load_dotenv
 load_dotenv()  
 
 # setup ML model
-classifier = Classifier()
-classifier.clean_data()
-classifier.fit()
+classifier = Classifier(sheet_name='AmazonReceipts', sheet_page='Sheet1')
+classifier.setup()
 
 # setup imap session
 imapManager = ImapManager(os.environ['GMAIL_EMAIL'], os.environ['GMAIL_PASSWORD'])
@@ -54,7 +53,7 @@ def check_mail():
                 print(body)
 
                 # Predict if the email is a receipt
-                prediction = classifier.predict(body)
+                prediction = classifier.predict(body, 'receipt', 'not_receipt')
                 print(prediction)
                 # if prediction == 'reject':  # move to reject inbox
                 #     typ, /data = imap.store(num, '+X-GM-LABELS', '"Application Updates"')
