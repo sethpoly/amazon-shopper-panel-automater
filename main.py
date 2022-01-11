@@ -11,7 +11,6 @@ load_dotenv()
 
 # setup ML model
 classifier = Classifier(sheet_name='AmazonReceipts', sheet_page='Sheet1')
-classifier.setup()
 
 # setup imap session
 imapManager = ImapManager(os.environ['GMAIL_EMAIL'], os.environ['GMAIL_PASSWORD'])
@@ -19,7 +18,7 @@ imapManager = ImapManager(os.environ['GMAIL_EMAIL'], os.environ['GMAIL_PASSWORD'
 # Loop through all emails starting from most recent
 # Using receipt classifier, determine if is valid receipt
 # Send email to amazon shopper panel email address if valid
-# Continue until 15 successful emails sent
+# Continue until X successful emails are sent
 def check_mail():
     emailsToCheck = 10
     count = 0

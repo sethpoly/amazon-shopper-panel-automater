@@ -6,7 +6,6 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn.model_selection import train_test_split
 from spreadsheet import Spreadsheet
 
-# Handles the data for receipt classifier
 # Uses sklearn, pandas, and Naive Bayes to predict if certain text belongs to one of two labels
 class Classifier:
     __nb = MultinomialNB()
@@ -19,8 +18,10 @@ class Classifier:
         self.sheet_page = sheet_page
         self.df = self.__get_dataset(sheet_name, sheet_page)
 
+        self.__setup()
+
     # clean data set & fit sample data
-    def setup(self):
+    def __setup(self):
         self.clean_data()
         self.fit()
 
