@@ -1,4 +1,4 @@
-from email_parser import EmailParser
+from parser_tools.email_parser import EmailParser
 from classifier import Classifier
 from imap_manager import ImapManager
 from spreadsheet import Spreadsheet
