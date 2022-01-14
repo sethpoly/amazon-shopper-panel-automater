@@ -36,3 +36,6 @@ jobs:
     - name: Execute unit tests
       run: |
         pipenv run coverage run -m unittest discover -v
+    - name: Check code coverage
+      run: |
+        pipenv run coverage report
