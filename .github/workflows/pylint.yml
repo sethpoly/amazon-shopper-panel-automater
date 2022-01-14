@@ -30,15 +30,9 @@ jobs:
           pipenv install --deploy --dev
           pipenv install coverage
           pipenv install pylint
-    - name: Start virtual environment
+    - name: Run linter
       run: |
-        pipenv shell
-#     - name: Install pylint
-#       run: |
-#         pip install pylint
-    - name: Analysing the code with pylint
-      run: |
-        pylint --exit-zero `ls -R|grep .py$|xargs`
+        pipenv run pylint --exit-zero `ls -R|grep .py$|xargs`
     - name: Execute unit tests
       run: |
         coverage run -m unittest discover -v
