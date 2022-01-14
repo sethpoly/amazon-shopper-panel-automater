@@ -10,6 +10,7 @@ bs4 = "*"
 python-dotenv = "*"
 pandas = "*"
 sklearn = "*"
+coverage = "*"
 
 [dev-packages]
 

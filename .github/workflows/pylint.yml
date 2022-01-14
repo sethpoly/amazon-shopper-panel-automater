@@ -28,12 +28,14 @@ jobs:
       if: steps.cache-pipenv.outputs.cache-hit != 'true'
       run: |
           pipenv install --deploy --dev
-    - name: Install pylint
+          pipenv install coverage
+    - name: Install and run linter
       run: |
         pip install pylint
-    - name: Analysing the code with pylint
-      run: |
         pylint --exit-zero `ls -R|grep .py$|xargs`
     - name: Execute unit tests
       run: |
-        pipenv run python -m unittest discover -v
+        pipenv run coverage run --source=. -m unittest discover -v
+    - name: Check code coverage
+      run: |
+        pipenv run coverage report
