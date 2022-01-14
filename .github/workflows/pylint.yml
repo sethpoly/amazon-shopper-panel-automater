@@ -29,9 +29,9 @@ jobs:
       run: |
           pipenv install --deploy --dev
           pipenv install coverage
-          pip install pylint
-    - name: Run linter
+    - name: Install and run linter
       run: |
+        pip install pylint
         pylint --exit-zero `ls -R|grep .py$|xargs`
     - name: Execute unit tests
       run: |
