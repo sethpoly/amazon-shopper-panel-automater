@@ -34,3 +34,6 @@ jobs:
     - name: Analysing the code with pylint
       run: |
         pylint --exit-zero `ls -R|grep .py$|xargs`
+    - name: Execute unit tests
+      run: |
+        pipenv run python -m unittest discover -v
