@@ -2,7 +2,7 @@ import imaplib
 import time
 import traceback
 
-class ImapManager():
+class ImapClient():
     """manages authentication, logout, and overall imap session"""
 
     def __init__(self, username, password):

@@ -1,7 +1,7 @@
 from email_manager import EmailManager
 from parser_tools.email_parser import EmailParser
 from classifier import Classifier
-from imap_manager import ImapManager
+from imap_client import ImapClient
 from spreadsheet import Spreadsheet
 import email
 import os
@@ -12,9 +12,12 @@ load_dotenv()
 
 spreadsheet = Spreadsheet(sheet_name='AmazonReceipts', sheet_page='Sheet1')
 classifier = Classifier(spreadsheet=spreadsheet)
-imapManager = ImapManager(os.environ['GMAIL_EMAIL'], os.environ['GMAIL_PASSWORD'])
+imap_client = ImapClient(os.environ['IMAP_EMAIL'], os.environ['IMAP_PASSWORD'])
 categories = ("receipt", "not_receipt")
 
+# receipient to forward emails to
+receipient = "receipts@panel.amazon.com"
+
 # manages the classifying, sorting, parsing of emails
-emailManager = EmailManager(categories=categories, classifier=classifier, imapManager=imapManager)
-emailManager.check_mail()
+email_manager = EmailManager(categories=categories, classifier=classifier, imap_client=imap_client)
+email_manager.check_mail_and_forward(emails_to_forward=15, forward_category=categories[0], receipient=receipient)
