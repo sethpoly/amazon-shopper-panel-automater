@@ -24,7 +24,7 @@ class EmailManager:
     # Using receipt classifier, determine if is valid receipt
     # Send email to amazon shopper panel email address if valid
     # Continue until X successful emails are sent
-    def check_mail_and_forward(self, emails_to_forward:int, forward_category:str, receipient:str):
+    def check_mail_and_forward(self, emails_to_forward:int, forward_category:str, recipient:str):
         # open smtp connection
         self.smtp = SmtpClient(username=os.environ['SMTP_EMAIL'], password=os.environ['SMTP_PASSWORD'])
         self.smtp.open_connection()
@@ -65,7 +65,7 @@ class EmailManager:
 
                     # testing
                     if mail.category == forward_category:
-                        self.__forward_email(mail=mail, receipient=receipient)
+                        self.__forward_email(mail=mail, recipient=recipient)
                         forwarded_emails_count += 1
                     
                     self.__store_in_inbox(mail=mail,index=str(i))
@@ -101,7 +101,7 @@ class EmailManager:
                 pass
         return body
 
-    def __forward_email(self, mail, receipient):
+    def __forward_email(self, mail, recipient):
         """
         Forward email to specicied recipient
 
@@ -109,19 +109,19 @@ class EmailManager:
         ----------
         mail:Mail
             the email to forward
-        receipient:str
+        recipient:str
             the client to receive the email
         """
-        # delay so receipient doesn't blacklist you lol
+        # delay so recipient doesn't blacklist you lol
         time.sleep(1.5)
 
         # mutate email until a forwardable email
-        email_to_forward = self.__generate_forward_email(mail=mail, receipient=receipient)
+        email_to_forward = self.__generate_forward_email(mail=mail, recipient=recipient)
 
         # forward!
         self.smtp.send_mail(mail=email_to_forward)
 
-    def __generate_forward_email(self, mail:Mail, receipient:str) -> Mail:
+    def __generate_forward_email(self, mail:Mail, recipient:str) -> Mail:
         """
         Generate an email to forward using an existing email
 
@@ -129,13 +129,13 @@ class EmailManager:
         ----------
         mail:Mail
             the existing email to change the headers of
-        receipient:str
+        recipient:str
             the client to forward the email to
         """
         # replace headers
         msg = MIMEMultipart()
         msg['From'] = self.smtp.username
-        msg['To'] = receipient
+        msg['To'] = recipient
         msg['Subject'] = mail.subject
         body = mail.body
         msg.attach(MIMEText(body))

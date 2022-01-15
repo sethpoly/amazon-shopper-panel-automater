@@ -15,9 +15,9 @@ classifier = Classifier(spreadsheet=spreadsheet)
 imap_client = ImapClient(os.environ['IMAP_EMAIL'], os.environ['IMAP_PASSWORD'])
 categories = ("receipt", "not_receipt")
 
-# receipient to forward emails to
-receipient = "receipts@panel.amazon.com"
+# recipient to forward emails to
+recipient = "receipts@panel.amazon.com"
 
 # manages the classifying, sorting, parsing of emails
 email_manager = EmailManager(categories=categories, classifier=classifier, imap_client=imap_client)
-email_manager.check_mail_and_forward(emails_to_forward=15, forward_category=categories[0], receipient=receipient)
+email_manager.check_mail_and_forward(emails_to_forward=15, forward_category=categories[0], recipient=recipient)
