@@ -1,10 +1,12 @@
+from email.message import Message
+from mail import Mail
 from parser_tools.email_parser import EmailParser
 import email
 
+
 class EmailManager:
-    yesCategory = []
-    noCategory = []
-    
+    mails = []
+
     def __init__(self, categories, classifier, imapManager):
         self.categories = categories
         self.classifier = classifier
@@ -17,7 +19,8 @@ class EmailManager:
     def check_mail(self):
         emailsToCheck = 10
         count = 0
-        print(f"Checking mail for receipts for the next {emailsToCheck} emails..")
+        print(
+            f"Checking mail for receipts for the next {emailsToCheck} emails..")
 
         status, messages = self.imapManager.imap.select("INBOX")
         if status != "OK":
@@ -32,24 +35,16 @@ class EmailManager:
             for response in msg:
                 if isinstance(response, tuple):
                     msg = email.message_from_bytes(response[1])
+                    body = EmailParser.clean_text(self.__getBodyFromMessage(msg=msg))
 
-                    sender = msg["From"]
-                    subject = msg["Subject"]
-                    print(sender)
-                    print(subject)
+                    # Predict mail category 
+                    prediction = self.classifier.predict(
+                        body, self.categories[0], self.categories[1])
 
-                    # Grab the body of the email
-                    for part in msg.walk():
-                        try:
-                            body = part.get_payload(decode=True).decode()
-                        except:
-                            pass
-                    body = EmailParser.clean_text(body)  # Clean formatting of email
-                    print(body)
+                    # build mail object
+                    mail = Mail(msg=msg, category=prediction, body=body)
+                    print(str(mail))
 
-                    # Predict if the email is a receipt
-                    prediction = self.classifier.predict(body, self.categories[0], self.categories[1])
-                    print(prediction)
                     # if prediction == 'reject':  # move to reject inbox
                     #     typ, /data = imap.store(num, '+X-GM-LABELS', '"Application Updates"')
                     #     add_reject_row(company_name, body)  # Add entry to spreadsheet
@@ -63,6 +58,17 @@ class EmailManager:
                     # typ, data = imap.store(num, '+FLAGS', '\\Deleted')
 
         self.imapManager.close_connection()
+
+    # get body from a message object
+    def __getBodyFromMessage(self, msg: Message):
+        body = ""
+        # Grab the body of the email
+        for part in msg.walk():
+            try:
+                body = part.get_payload(decode=True).decode()
+            except:
+                pass
+        return body
 
     # If determined as receipt, forward email to amazon {use correct 'from' address}
     def __forward_email(email):
