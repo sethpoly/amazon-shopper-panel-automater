@@ -7,9 +7,10 @@ class ImapManager():
         self.imap = imaplib.IMAP4_SSL('imap.gmail.com')
         self.username = username
         self.password = password
+        self.__authenticate()
 
     # Authenticate a imap session instance using class level credentials
-    def authenticate(self):
+    def __authenticate(self):
         try:
             (retcode, capabilities) = self.imap.login(self.username, self.password)
             print(f'Logged in as {self.username} at {time.strftime("%H:%M:%S", time.localtime())}.')
