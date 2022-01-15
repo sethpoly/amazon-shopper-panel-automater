@@ -1,4 +1,5 @@
 from email.message import Message
+from re import I
 from classifier import Classifier
 from imap_client import ImapClient
 from mail import Mail
@@ -28,7 +29,7 @@ class EmailManager:
         self.smtp = SmtpClient(username=os.environ['SMTP_EMAIL'], password=os.environ['SMTP_PASSWORD'])
         self.smtp.open_connection()
 
-        emails_to_check = 30
+        emails_to_check = 100
         checked_emails_count = 0
         forwarded_emails_count = 0
         print(
@@ -66,6 +67,8 @@ class EmailManager:
                     if mail.category == forward_category:
                         self.__forward_email(mail=mail, receipient=receipient)
                         forwarded_emails_count += 1
+                    
+                    self.__store_in_inbox(mail=mail,index=str(i))
 
                     # if prediction == 'reject':  # move to reject inbox
                     #     typ, /data = imap.store(num, '+X-GM-LABELS', '"Application Updates"')
@@ -138,4 +141,14 @@ class EmailManager:
         msg.attach(MIMEText(body))
 
         return Mail(msg, category=mail.category, body=body)
+
+    def __store_in_inbox(self, mail: Mail, index):
+        self.imap_client.imap.store(index, '+X-GM-LABELS', f'{mail.category}')
+        self.imap_client.imap.store(index, '+X-GM-LABELS', '"CheckedButPrimary"')
+
+        # Remove SEEN flag
+        self.imap_client.imap.store(index, '-FLAGS', '\\Seen')
+
+         # Delete from primary inbox
+        self.imap_client.imap.store(index, '+FLAGS', '\\Deleted')
 
