@@ -10,10 +10,11 @@ from dotenv import load_dotenv
 # load environment variables from .env
 load_dotenv()  
 
-classifier = Classifier(sheet_name='AmazonReceipts', sheet_page='Sheet1')
+spreadsheet = Spreadsheet(sheet_name='AmazonReceipts', sheet_page='Sheet1')
+classifier = Classifier(spreadsheet=spreadsheet)
 imapManager = ImapManager(os.environ['GMAIL_EMAIL'], os.environ['GMAIL_PASSWORD'])
 categories = ("receipt", "not_receipt")
 
 # manages the classifying, sorting, parsing of emails
-emailManager = EmailManager(categories=categories, classifier = classifier, imapManager = imapManager)
+emailManager = EmailManager(categories=categories, classifier=classifier, imapManager=imapManager)
 emailManager.check_mail()

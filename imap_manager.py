@@ -3,14 +3,16 @@ import time
 import traceback
 
 class ImapManager():
+    """manages authentication, logout, and overall imap session"""
+
     def __init__(self, username, password):
         self.imap = imaplib.IMAP4_SSL('imap.gmail.com')
         self.username = username
         self.password = password
-        self.__authenticate()
+        self.open_connection()
 
-    # Authenticate a imap session instance using class level credentials
-    def __authenticate(self):
+    def open_connection(self):
+        """Authenticate a imap session instance using class level credentials"""
         try:
             (retcode, capabilities) = self.imap.login(self.username, self.password)
             print(f'Logged in as {self.username} at {time.strftime("%H:%M:%S", time.localtime())}.')
@@ -18,8 +20,9 @@ class ImapManager():
             traceback.print_exc()
 
 
-    # Close the imap connection
     def close_connection(self):
+        """Close the imap connection"""
+        
         try:
             self.imap.close()
             self.imap.logout()

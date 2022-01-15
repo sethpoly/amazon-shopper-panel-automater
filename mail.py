@@ -1,6 +1,5 @@
 from email.message import Message
 
-
 class Mail():
     category = ""
 

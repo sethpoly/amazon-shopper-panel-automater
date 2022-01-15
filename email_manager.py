@@ -3,8 +3,8 @@ from mail import Mail
 from parser_tools.email_parser import EmailParser
 import email
 
-
 class EmailManager:
+    """manages the incoming emails, makes a prediction, and delegates organization cleanup"""
     mails = []
 
     def __init__(self, categories, classifier, imapManager):
@@ -59,8 +59,13 @@ class EmailManager:
 
         self.imapManager.close_connection()
 
-    # get body from a message object
     def __getBodyFromMessage(self, msg: Message):
+        """get body from a message object
+            Parameters
+            ----------
+            msg: Message
+        """
+        
         body = ""
         # Grab the body of the email
         for part in msg.walk():
