@@ -1,39 +1,58 @@
 import string
 import pandas as pd
+from pandas.core.frame import DataFrame
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.preprocessing import LabelEncoder
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.model_selection import train_test_split
 from spreadsheet import Spreadsheet
 
-# Uses sklearn, pandas, and Naive Bayes to predict if certain text belongs to one of two labels
 class Classifier:
+    """Uses sklearn, pandas, and Naive Bayes to predict if certain text belongs to one of two labels"""
+
     __nb = MultinomialNB()
     __vectorizer = CountVectorizer()
     __encoder = LabelEncoder()
     __x_train, __x_test, __y_train, __y_test = None, None, None, None
 
-    def __init__(self, sheet_name, sheet_page):
-        self.sheet_name = sheet_name
-        self.sheet_page = sheet_page
-        self.df = self.__get_dataset(sheet_name, sheet_page)
+    def __init__(self, spreadsheet:Spreadsheet):
+        self.df = self.__get_dataset(spreadsheet=spreadsheet)
 
         self.__setup()
 
-    # clean data set & fit sample data
     def __setup(self):
+        """clean data set & fit sample data"""
+
         self.clean_data()
         self.fit()
 
-    # Retrieve most recent dataset using a spreadsheet
-    def __get_dataset(self, sheet_name, sheet_page):
-        data_sheet = Spreadsheet(sheet_name, sheet_page).sheet
+    def __get_dataset(self, spreadsheet:Spreadsheet) -> DataFrame:
+        """retrieve most recent dataset using a spreadsheet name and sheet
+
+            Parameters
+            ----------
+            sheet_name: str
+                The parent sheet name the google account has access too
+            sheet_page: str
+                The specific sheet page with the `sheet_name`
+
+            Returns
+            --------
+            DataFrame
+                Pandas-generated DataFrame using specified sheet
+        """
+
+        data_sheet = spreadsheet.sheet
         rows = data_sheet.get_all_values()
         return pd.DataFrame.from_records(rows)
 
-    # Removes punctuation, HTML, from EMAIL column in data set
-    # df[0] is first column, df[1] is second column
+    
     def clean_data(self):
+        """
+        Removes punctuation, HTML, from first column in data set\n
+        - df[0] is first column, df[1] is second column
+        """
+
         try:
             self.df[0] = self.df[0].apply(lambda x: x.lower())
             self.df[0] = self.df[0].apply(lambda x: x.translate(str.maketrans('', '', string.punctuation)))
@@ -42,8 +61,9 @@ class Classifier:
         except AttributeError as e:
             print(f'Whoops: {repr(e)}')
 
-    # Fit data using Naive Bayes classifier
     def fit(self):
+        """fit data using Naive Bayes classifier"""
+
         # pull data into vectors to create collection of text/tokens
         x = self.__vectorizer.fit_transform(self.df[0])
         y = self.__encoder.fit_transform(self.df[1])
@@ -54,8 +74,21 @@ class Classifier:
         # Fit dataset in naive bayes classifier
         self.__nb.fit(self.__x_train, self.__y_train)
 
-    # Predict if @param email is apart of specific column or not
-    def predict(self, email, correct_label, wrong_label):
+    def predict(self, text:str, correct_label, wrong_label):
+        """Predict the category the given `text` belongs to
+
+            Parameters
+            ----------
+            correct_label:str
+                One of two categories the text can belong too
+            wrong_label:str
+                One of two categories the text can belong too
+
+            Returns
+            -------
+            prediction:str
+                Either `correct_label` or `wrong_label`
+        """
         category_names = {correct_label: correct_label, wrong_label: wrong_label}
-        cod = self.__nb.predict(self.__vectorizer.transform([email]))
+        cod = self.__nb.predict(self.__vectorizer.transform([text]))
         return category_names[self.__encoder.inverse_transform(cod)[0]]
