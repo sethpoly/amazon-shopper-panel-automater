@@ -23,8 +23,8 @@ class Classifier:
     def __setup(self):
         """clean data set & fit sample data"""
 
-        self.clean_data()
-        self.fit()
+        self.__clean_data()
+        self.__fit()
 
     def __get_dataset(self, spreadsheet:Spreadsheet) -> DataFrame:
         """retrieve most recent dataset using a spreadsheet name and sheet
@@ -47,7 +47,7 @@ class Classifier:
         return pd.DataFrame.from_records(rows)
 
     
-    def clean_data(self):
+    def __clean_data(self):
         """
         Removes punctuation, HTML, from first column in data set\n
         - df[0] is first column, df[1] is second column
@@ -61,7 +61,7 @@ class Classifier:
         except AttributeError as e:
             print(f'Whoops: {repr(e)}')
 
-    def fit(self):
+    def __fit(self):
         """fit data using Naive Bayes classifier"""
 
         # pull data into vectors to create collection of text/tokens
