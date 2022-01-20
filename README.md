@@ -32,7 +32,7 @@ After parsing, predicting, and forwarding all relevant emails, the emails will b
 <br>
 In the **Amazon Shopper Panel** app, track the status of the *receipt* emails that were forwarded. If `Not eligible` is next to any of the emails, it just means your classifier made an incorrect prediction. Simply add more entries to the original spreadsheet to gain prediction accuracy.
 <br>
-![Panel](https://github.com/sethpoly/amazon-shopper-panel-automater/blob/main/demo/images/panel.jpg)
+![Panel](https://github.com/sethpoly/amazon-shopper-panel-automater/blob/main/demo/images/panel.jpg){:height="50%" width="50%"}
 <br>
 
 ## Technology Used
