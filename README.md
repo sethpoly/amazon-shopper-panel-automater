@@ -23,7 +23,7 @@ I use a Naive Bayes classifier to determine whether a specific email is a **rece
 
 *An example of the spreadsheet that is used to train the classifier. The data set should consist of a multitude of emails that are either a **receipt or not_receipt***
 <br>
-![Spreadsheet](https://github.com/sethpoly/amazon-shopper-panel-automater/blob/main/demo/images/spreadsheet.png)
+<img src="https://github.com/sethpoly/amazon-shopper-panel-automater/raw/main/demo/images/spreadsheet.png">
 <br>
 
 ### **The results**
@@ -32,7 +32,7 @@ After parsing, predicting, and forwarding all relevant emails, the emails will b
 <br>
 In the **Amazon Shopper Panel** app, track the status of the *receipt* emails that were forwarded. If `Not eligible` is next to any of the emails, it just means your classifier made an incorrect prediction. Simply add more entries to the original spreadsheet to gain prediction accuracy.
 <br>
-![Panel](https://github.com/sethpoly/amazon-shopper-panel-automater/blob/main/demo/images/panel.jpg){:height="50%" width="50%"}
+<img src="https://github.com/sethpoly/amazon-shopper-panel-automater/raw/main/demo/images/panel.jpg" width=35% height=35%>
 <br>
 
 ## Technology Used
