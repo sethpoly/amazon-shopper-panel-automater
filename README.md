@@ -19,7 +19,7 @@ I created this because it's too time consuming to manually look through my past 
 <br>
 
 ### **The classifier**
-I use a Naive Bayes classifier to determine whether a specific email is a **receipt** or **not_receipt**. This classifier is trained on a simple **Google Sheet** spreadsheet that I update semi-frequently in order to gain a more accurate prediction.
+I used a Naive Bayes classifier to determine whether a specific email is a **receipt** or **not_receipt**. This classifier is trained on a simple **Google Sheet** spreadsheet that I update semi-frequently in order to gain a more accurate prediction.
 
 *An example of the spreadsheet that is used to train the classifier. The data set should consist of a multitude of emails that are either a **receipt or not_receipt***
 <br>
@@ -30,7 +30,7 @@ I use a Naive Bayes classifier to determine whether a specific email is a **rece
 After parsing, predicting, and forwarding all relevant emails, the emails will be categorized in their own respective inboxes in *Gmail*. This ensures no duplicate entries could ever be classified.
 <br>
 <br>
-In the **Amazon Shopper Panel** app, track the status of the *receipt* emails that were forwarded. If `Not eligible` is next to any of the emails, it just means your classifier made an incorrect prediction. Simply add more entries to the original spreadsheet to gain prediction accuracy.
+In the **Amazon Shopper Panel** app, track the status of the *receipt* emails that were forwarded. If `Not eligible` is next to any of the emails, it just means your classifier made an incorrect prediction. Simply add more entries to the original spreadsheet to gain higher accuracy when predicting.
 <br>
 <img src="https://github.com/sethpoly/amazon-shopper-panel-automater/raw/main/demo/images/panel.jpg" width=35% height=35%>
 <br>
