@@ -1,0 +1,4 @@
+IMAP_EMAIL=emails_to_parse@gmail.com
+IMAP_PASSWORD=AwesomePassword
+SMTP_EMAIL=amazon_linked_email@gmail.com
+SMTP_PASSWORD=AnotherAwesomePassword

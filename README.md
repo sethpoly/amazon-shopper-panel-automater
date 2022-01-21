@@ -35,6 +35,19 @@ In the **Amazon Shopper Panel** app, track the status of the *receipt* emails th
 <img src="https://github.com/sethpoly/amazon-shopper-panel-automater/raw/main/demo/images/panel.jpg" width=35% height=35%>
 <br>
 
+## Quick start
+### Configure a new project in *Google Cloud Console* that will be used to access the Google Sheets API
+1. Make sure API is enabled, and also enable the **Sheets API** and **Google Drive API**.
+2. Add *Service Account Credentials* to your project using `JSON` as the key type. Note down the `Service account ID`, you will need this in order to read/write to your *Google Sheets*. Set the permissions however you'd like, but you really only need *view*.
+3. Now a JSON file `google_key.json` should have downloaded from the previous step. This is an important file that is needed to use the *Sheets API* within the project. **This file must be at the root level of the project directory, but it should not be tracked**.
+4. Share access to the **Google Sheet that the classifier will train on** using the `Service account ID` you noted down before.
+<br>
+<img src="https://github.com/sethpoly/amazon-shopper-panel-automater/raw/main/demo/images/sheet_access.png" width=50% height=50%>
+<br>
+### Configure your Gmail accounts for IMAP and SMTP
+
+
+
 ## Technology Used
 - Python3, Google Sheets API, pandas, sklearn, imap, smtp
 
