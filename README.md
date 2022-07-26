@@ -44,9 +44,14 @@ In the **Amazon Shopper Panel** app, track the status of the *receipt* emails th
 <br>
 <img src="https://github.com/sethpoly/amazon-shopper-panel-automater/raw/main/demo/images/sheet_access.png" width=50% height=50%>
 <br>
-### Configure your Gmail accounts for IMAP and SMTP
 
+### TODO: Configure your Gmail accounts for IMAP and SMTP
 
+### Run the script
+Within the home directory of the project:
+`pipenv install` to install all dependencies from the pipfile
+`pipenv shell` to start an interactive shell session
+`pipenv run python main.py` to run the script!
 
 ## Technology Used
 - Python3, Google Sheets API, pandas, sklearn, imap, smtp
